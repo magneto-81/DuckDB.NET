@@ -215,4 +215,19 @@ public class DuckDBConnection : DbConnection
 
         return duplicatedConnection;
     }
+
+    public DuckDBBulkCopy CreateBulkCopy() 
+    {
+        return new(this, DuckDBBulkCopyOptions.Default);
+    }
+
+    public DuckDBBulkCopy CreateBulkCopy(DuckDBBulkCopyOptions bulkCopyOptions) 
+    {
+        return new(this, bulkCopyOptions);
+    }
+
+    public DuckDBBulkCopy CreateBulkCopy(DuckDBBulkCopyOptions bulkCopyOptions, DuckDBTransaction transaction) 
+    {
+        return new(this, bulkCopyOptions, transaction);
+    }
 }

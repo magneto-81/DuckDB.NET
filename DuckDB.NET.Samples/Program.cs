@@ -20,11 +20,13 @@ namespace DuckDB.NET.Samples
                 return;
             }
 
-            DapperSample();
+            //DapperSample();
 
-            AdoNetSamples();
+            //AdoNetSamples();
 
-            LowLevelBindingsSample();
+            AdoNetBulkSamples();
+
+            //LowLevelBindingsSample();
         }
 
         private static void DapperSample()
@@ -85,6 +87,35 @@ namespace DuckDB.NET.Samples
             }
             catch (DuckDBException e)
             {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private static void AdoNetBulkSamples() {
+            if (File.Exists("file.db")) {
+                File.Delete("file.db");
+            }
+
+            using System.Data.SqlClient.SqlConnection sqlConnection = new("Server=nb097;Database=IrionDQCatalogLatest;Trusted_Connection=True;");
+            sqlConnection.Open();
+
+            using var sqlCommand = sqlConnection.CreateCommand();
+            sqlCommand.CommandText = "SELECT * FROM Privilege";
+            sqlCommand.CommandType = System.Data.CommandType.Text;
+
+            using var sqlreader = sqlCommand.ExecuteReader();
+            
+
+            using var duckDBConnection = new DuckDBConnection("Data Source=file.db");
+            duckDBConnection.Open();
+
+            var bulk = duckDBConnection.CreateBulkCopy();           
+
+            try {
+
+                bulk.WriteToServer(sqlreader);
+
+            } catch (DuckDBException e) {
                 Console.WriteLine(e.Message);
             }
         }

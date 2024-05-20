@@ -1,28 +1,31 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <SonarQubeExclude>true</SonarQubeExclude>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<SonarQubeExclude>true</SonarQubeExclude>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+	</PropertyGroup>
 
-  <PropertyGroup>
-    <BuildType>Full</BuildType>
-  </PropertyGroup>
+	<PropertyGroup>
+		<BuildType>Full</BuildType>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="..\DuckDB.NET.Test\Helpers\NativeLibraryHelper.cs" Link="Helpers\NativeLibraryHelper.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.24" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\DuckDB.NET.Test\Helpers\NativeLibraryHelper.cs" Link="Helpers\NativeLibraryHelper.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.1.24" />
+		<PackageReference Include="System.Data.SqlClient" Version="4.8.6">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DuckDB.NET.Data\Data.csproj" />
-    <ProjectReference Include="..\DuckDB.NET.Bindings\Bindings.csproj" properties="BuildType=Full" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\DuckDB.NET.Data\Data.csproj" />
+		<ProjectReference Include="..\DuckDB.NET.Bindings\Bindings.csproj" properties="BuildType=Full" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+	<ItemGroup>
+		<Folder Include="Helpers\" />
+	</ItemGroup>
 </Project>
