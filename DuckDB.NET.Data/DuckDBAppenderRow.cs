@@ -2,6 +2,7 @@
 using DuckDB.NET.Data.Internal.Writer;
 using DuckDB.NET.Native;
 using System;
+using System.Collections.Generic;
 using System.Collections;
 using System.Data;
 using System.Numerics;
@@ -176,6 +177,12 @@ public class DuckDBAppenderRow
     {
         return AppendValueInternal(value);
     }
+
+    #endregion
+
+    #region Composite Types
+
+    public DuckDBAppenderRow AppendValue<T>(IEnumerable<T>? value) => AppendValueInternal(value);
 
     #endregion
 
