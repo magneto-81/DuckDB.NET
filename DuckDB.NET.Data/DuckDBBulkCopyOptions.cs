@@ -19,25 +19,15 @@ public enum DuckDBBulkCopyOptions
     KeepIdentity = 1,
 
     /// <summary>
-    /// Check constraints while data is being inserted. By default, constraints are not checked.
-    /// </summary>
-    CheckConstraints = 2,
-
-    /// <summary>
-    /// Obtain a bulk update lock for the duration of the bulk copy operation. When not specified, row locks are used.
-    /// </summary>
-    TableLock = 4,
-
-    /// <summary>
     /// Preserve null values in the destination table regardless of the settings for default values. 
     /// When not specified, null values are replaced by default values where applicable.
     /// </summary>
-    KeepNulls = 8,
+    KeepNulls = 2,
 
     /// <summary>
     /// When specified, each batch of the bulk-copy operation will occur within a transaction. 
     /// If you indicate this option and also provide a DuckDBTransaction object to the constructor, an System.ArgumentException occurs.
     /// </summary>
-    UseInternalTransaction = 32
+    UseInternalTransaction = 4
 
 }

@@ -35,7 +35,7 @@ public class DuckDBClientFactory : DbProviderFactory
 
     public override DbConnectionStringBuilder CreateConnectionStringBuilder() => new DuckDBConnectionStringBuilder();
 
-    public override DbDataAdapter CreateDataAdapter() => throw new NotImplementedException();
+    public override DbDataAdapter CreateDataAdapter() => null;
 
     public override DbParameter CreateParameter() => new DuckDBParameter();
 

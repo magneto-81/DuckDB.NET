@@ -46,6 +46,12 @@ public sealed class DuckDBBulkCopyColumnMappingCollection : CollectionBase {
         return Add(new(sourceColumn, destinationColumn));
     }
 
+    public DuckDBBulkCopyColumnMapping Add(int sourceColumnIndex, int destinationColumnIndex) 
+    {
+        AssertWriteAccess();
+        return Add(new(sourceColumnIndex, destinationColumnIndex));
+    }
+
     public DuckDBBulkCopyColumnMapping Add(int sourceColumnIndex, string destinationColumn) 
     {
         AssertWriteAccess();
@@ -56,12 +62,6 @@ public sealed class DuckDBBulkCopyColumnMappingCollection : CollectionBase {
     {
         AssertWriteAccess();
         return Add(new(sourceColumn, destinationColumnIndex));
-    }
-
-    public DuckDBBulkCopyColumnMapping Add(int sourceColumnIndex, int destinationColumnIndex) 
-    {
-        AssertWriteAccess();
-        return Add(new(sourceColumnIndex, destinationColumnIndex));
     }
 
     private void AssertWriteAccess() 

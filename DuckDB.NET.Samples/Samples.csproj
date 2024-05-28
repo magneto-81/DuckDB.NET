@@ -6,10 +6,6 @@
 		<TargetFrameworks>net6.0</TargetFrameworks>
 	</PropertyGroup>
 
-	<PropertyGroup>
-		<BuildType>Full</BuildType>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<Compile Include="..\DuckDB.NET.Test\Helpers\NativeLibraryHelper.cs" Link="Helpers\NativeLibraryHelper.cs" />
 	</ItemGroup>

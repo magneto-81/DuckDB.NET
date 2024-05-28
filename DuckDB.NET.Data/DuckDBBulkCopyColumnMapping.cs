@@ -17,31 +17,37 @@ public sealed class DuckDBBulkCopyColumnMapping {
     internal int _internalDestinationColumnOrdinal;
     internal int _internalSourceColumnOrdinal;   // -1 indicates an undetermined value
 
-    public DuckDBBulkCopyColumnMapping() {
+    public DuckDBBulkCopyColumnMapping() 
+    {
         _internalSourceColumnOrdinal = -1;
     }
 
-    public DuckDBBulkCopyColumnMapping(string sourceColumn, string destinationColumn) {
-        SourceColumn = sourceColumn;
-        DestinationColumn = destinationColumn;
+    public DuckDBBulkCopyColumnMapping(string sourceColumn, string destinationColumn) 
+    {
+        SourceColumn = sourceColumn!;
+        DestinationColumn = destinationColumn!;
     }
 
-    public DuckDBBulkCopyColumnMapping(int sourceColumnOrdinal, string destinationColumn) {
-        SourceOrdinal = sourceColumnOrdinal;
-        DestinationColumn = destinationColumn;
-    }
-
-    public DuckDBBulkCopyColumnMapping(string sourceColumn, int destinationOrdinal) {
-        SourceColumn = sourceColumn;
-        DestinationOrdinal = destinationOrdinal;
-    }
-
-    public DuckDBBulkCopyColumnMapping(int sourceColumnOrdinal, int destinationOrdinal) {
+    public DuckDBBulkCopyColumnMapping(int sourceColumnOrdinal, int destinationOrdinal) 
+    {
         SourceOrdinal = sourceColumnOrdinal;
         DestinationOrdinal = destinationOrdinal;
     }
 
-    public string DestinationColumn {
+    public DuckDBBulkCopyColumnMapping(int sourceColumnOrdinal, string destinationColumn) 
+    {
+        SourceOrdinal = sourceColumnOrdinal;
+        DestinationColumn = destinationColumn;
+    }
+
+    public DuckDBBulkCopyColumnMapping(string sourceColumn, int destinationOrdinal) 
+    {
+        SourceColumn = sourceColumn;
+        DestinationOrdinal = destinationOrdinal;
+    }
+
+    public string DestinationColumn 
+    {
         get => destinationColumnName ?? string.Empty;
 
         set 
@@ -51,12 +57,14 @@ public sealed class DuckDBBulkCopyColumnMapping {
         }
     }
 
-    public int DestinationOrdinal {
+    public int DestinationOrdinal 
+    {
         get => destinationColumnOrdinal;
 
         set 
         {
-            if (value >= 0) {
+            if (value >= 0) 
+            {
                 destinationColumnName = null;
                 destinationColumnOrdinal = _internalDestinationColumnOrdinal = value;
             } else
@@ -64,7 +72,8 @@ public sealed class DuckDBBulkCopyColumnMapping {
         }
     }
 
-    public string SourceColumn {
+    public string SourceColumn 
+    {
         get => sourceColumnName ?? string.Empty;
 
         set 
@@ -74,7 +83,8 @@ public sealed class DuckDBBulkCopyColumnMapping {
         }
     }
 
-    public int SourceOrdinal {
+    public int SourceOrdinal 
+    {
         get => sourceColumnOrdinal;
 
         set 
@@ -87,6 +97,4 @@ public sealed class DuckDBBulkCopyColumnMapping {
                 throw new IndexOutOfRangeException();
         }
     }
-
-
 }
