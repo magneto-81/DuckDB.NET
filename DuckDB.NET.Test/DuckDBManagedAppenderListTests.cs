@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
-using System;
-using Bogus;
+﻿using Bogus;
+using DuckDB.NET.Native;
 using FluentAssertions;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
 using Xunit;
 
 namespace DuckDB.NET.Test;
@@ -15,15 +17,15 @@ public class DuckDBManagedAppenderListTests(DuckDBDatabaseFixture db) : DuckDBTe
     }
 
     [Fact]
-    public void ListValuesString()
-    {
-        ListValuesInternal("Varchar", faker => faker.Random.Utf16String());
-    }
-
-    [Fact]
     public void ListValuesSByte()
     {
         ListValuesInternal("TinyInt", faker => faker.Random.SByte());
+    }
+
+    [Fact]
+    public void ListValuesShort()
+    {
+        ListValuesInternal("SmallInt", faker => faker.Random.Short());
     }
 
     [Fact]
@@ -33,15 +35,51 @@ public class DuckDBManagedAppenderListTests(DuckDBDatabaseFixture db) : DuckDBTe
     }
 
     [Fact]
-    public void ArrayValuesInt()
-    {
-        ListValuesInternal("Integer", faker => faker.Random.Int(), 5);
-    }
-
-    [Fact]
     public void ListValuesLong()
     {
         ListValuesInternal("BigInt", faker => faker.Random.Long());
+    }
+
+    [Fact]
+    public void ListValuesHugeInt()
+    {
+        ListValuesInternal("HugeInt", faker => BigInteger.Subtract(DuckDBHugeInt.HugeIntMaxValue, faker.Random.Int(min: 0)));
+    }
+
+    [Fact]
+    public void ListValuesByte()
+    {
+        ListValuesInternal("UTinyInt", faker => faker.Random.Byte());
+    }
+
+    [Fact]
+    public void ListValuesUShort()
+    {
+        ListValuesInternal("USmallInt", faker => faker.Random.UShort());
+    }
+
+    [Fact]
+    public void ListValuesUInt()
+    {
+        ListValuesInternal("UInteger", faker => faker.Random.UInt());
+    }
+
+    [Fact]
+    public void ListValuesULong()
+    {
+        ListValuesInternal("UBigInt", faker => faker.Random.ULong());
+    }
+
+    [Fact]
+    public void ListValuesUHugeInt()
+    {
+        ListValuesInternal("UHugeInt", faker => BigInteger.Subtract(DuckDBHugeInt.HugeIntMaxValue, faker.Random.Int(min: 0)));
+    }
+
+    [Fact]
+    public void ListValuesDecimal()
+    {
+        ListValuesInternal("Decimal(38,28)", faker => faker.Random.Decimal());
     }
 
     [Fact]
@@ -56,11 +94,45 @@ public class DuckDBManagedAppenderListTests(DuckDBDatabaseFixture db) : DuckDBTe
         ListValuesInternal("Double", faker => faker.Random.Double());
     }
 
+    [Fact]
+    public void ListValuesGuid()
+    {
+        ListValuesInternal("UUID", faker => faker.Random.Guid());
+    }
+
+    [Fact]
+    public void ListValuesDate()
+    {
+        ListValuesInternal("Date", faker => faker.Date.Past().Date);
+    }
+
+    [Fact]
+    public void ListValuesString()
+    {
+        ListValuesInternal("Varchar", faker => faker.Random.Utf16String());
+    }
+
+    [Fact]
+    public void ListValuesInterval()
+    {
+        ListValuesInternal("Interval", faker =>
+        {
+            var timespan = faker.Date.Timespan();
+
+            return TimeSpan.FromTicks(timespan.Ticks - timespan.Ticks % 10);
+        });
+    }
+
+    [Fact]
+    public void ArrayValuesInt()
+    {
+        ListValuesInternal("Integer", faker => faker.Random.Int(), 5);
+    }
 
     private void ListValuesInternal<T>(string typeName, Func<Faker, T> generator, int? length = null)
     {
         var rows = 2000;
-        var table = $"managedAppender{typeName}Lists";
+        var table = $"managedAppenderLists";
 
         var columnLength = length.HasValue ? length.Value.ToString() : "";
         Command.CommandText = $"CREATE OR REPLACE TABLE {table} (a Integer, b {typeName}[{columnLength}], c {typeName}[][]);";
