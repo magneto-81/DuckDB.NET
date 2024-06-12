@@ -27,8 +27,10 @@ namespace DuckDB.NET.Samples
 
             //AdoNetSamples();
 
-            AdoNetDuckDBBulkSamples();
-            AdoNetSqlBulkSamples();
+            AdoNetBlobSample();
+            //AdoNetDuckDBBulkSamples();
+            //AdoNetSqlBulkSamples();
+
             //LowLevelBindingsSample();
         }
 
@@ -93,6 +95,30 @@ namespace DuckDB.NET.Samples
                 Console.WriteLine(e.Message);
             }
         }
+
+        /// <summary>
+        /// SELECT '\xAA\xAB\xAC'::BLOB;
+        /// </summary>
+        private static void AdoNetBlobSample() {
+            if (File.Exists("file.db")) {
+                File.Delete("file.db");
+            }
+
+            using var duckDBConnection = new DuckDBConnection("Data Source=:memory:");
+            duckDBConnection.Open();
+
+            using var cmd = duckDBConnection.CreateCommand();
+            cmd.CommandText = "SELECT 'AA'::BLOB;";
+            using var reader = cmd.ExecuteReader();
+
+            reader.Read();
+
+            var type = reader.GetFieldType(0);
+            var value = reader.GetValue(0);
+            var value1 = reader.GetFieldValue<byte[]>(0);
+            var value2 = reader.GetStream(0);
+
+        } 
 
         private static void AdoNetDuckDBBulkSamples() {
             if (File.Exists("file.db")) {

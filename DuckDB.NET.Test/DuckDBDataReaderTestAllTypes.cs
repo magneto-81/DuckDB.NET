@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
+using System.Text;
+
 using DuckDB.NET.Data;
 using DuckDB.NET.Native;
 using FluentAssertions;
@@ -322,14 +324,18 @@ public class DuckDBDataReaderTestAllTypes : DuckDBTestBase
     {
         var columnIndex = 28;
         reader.GetOrdinal("blob").Should().Be(columnIndex);
-        reader.GetProviderSpecificFieldType(columnIndex).Should().Be(typeof(Stream));
+        reader.GetProviderSpecificFieldType(columnIndex).Should().Be(typeof(byte[]));
 
-        using (var stream = reader.GetStream(columnIndex))
-        {
-            var streamReader = new StreamReader(stream);
+        var byteArrayItem = (byte[])reader.GetValue(columnIndex);
 
-            streamReader.ReadToEnd().Should().Be("thisisalongblob\x00withnullbytes");
-        }
+        Encoding.UTF8.GetString(byteArrayItem).Should().Be("thisisalongblob\x00withnullbytes");
+
+        //using (var stream = reader.GetStream(columnIndex))
+        //{
+        //    var streamReader = new StreamReader(stream);
+
+        //    streamReader.ReadToEnd().Should().Be("thisisalongblob\x00withnullbytes");
+        //}
 
         reader.Read();
 

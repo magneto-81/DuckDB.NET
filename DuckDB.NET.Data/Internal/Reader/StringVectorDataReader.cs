@@ -14,24 +14,52 @@ internal sealed class StringVectorDataReader : VectorDataReaderBase
 
     protected override T GetValidValue<T>(ulong offset, Type targetType)
     {
-        return DuckDBType switch
-        {
-            DuckDBType.Bit => GetBitString<T>(offset),
-            DuckDBType.Blob => (T)(object)GetStream(offset),
-            DuckDBType.Varchar => (T)(object)GetString(offset),
-            _ => base.GetValidValue<T>(offset, targetType)
-        };
+        switch (DuckDBType) {
+
+            case DuckDBType.Bit: return GetBitString<T>(offset);
+            case DuckDBType.Blob: {
+                if (targetType == typeof(Stream))
+                    return (T)(object)GetStream(offset);
+                else if (targetType == typeof(byte[]))
+                    return (T)(object)GetBytes(offset);
+                else
+                    return base.GetValidValue<T>(offset, targetType);
+            }
+
+            case DuckDBType.Varchar: return (T)(object)GetString(offset);
+            default: return base.GetValidValue<T>(offset, targetType);
+        }
+        //return DuckDBType switch
+        //{
+        //    DuckDBType.Bit => GetBitString<T>(offset),
+        //    DuckDBType.Blob => (T)(object)GetBytes(offset),//GetStream(offset),
+        //    DuckDBType.Varchar => (T)(object)GetString(offset),
+        //    _ => base.GetValidValue<T>(offset, targetType)
+        //};
     }
 
     internal override object GetValue(ulong offset, Type targetType)
     {
-        return DuckDBType switch
-        {
-            DuckDBType.Bit => GetBitString(offset),
-            DuckDBType.Blob => GetStream(offset),
-            DuckDBType.Varchar => GetString(offset),
-            _ => base.GetValue(offset, targetType)
-        };
+        switch (DuckDBType) {
+            case DuckDBType.Bit: return GetBitString(offset);
+            case DuckDBType.Blob: {
+                if (targetType == typeof(Stream))
+                    return GetStream(offset);
+                else if (targetType == typeof(byte[]))
+                    return GetBytes(offset);
+                else
+                    return base.GetValue(offset, targetType);
+            }
+            case DuckDBType.Varchar: return GetString(offset);
+            default: return base.GetValue(offset, targetType);
+        }
+        //return DuckDBType switch
+        //{
+        //    DuckDBType.Bit => GetBitString(offset),
+        //    DuckDBType.Blob => GetBytes(offset), //GetStream(offset),
+        //    DuckDBType.Varchar => GetString(offset),
+        //    _ => base.GetValue(offset, targetType)
+        //};
     }
 
     private T GetBitString<T>(ulong offset)
@@ -102,5 +130,17 @@ internal sealed class StringVectorDataReader : VectorDataReaderBase
         var data = (DuckDBString*)DataPointer + offset;
 
         return new UnmanagedMemoryStream((byte*)data->Data, data->Length, data->Length, FileAccess.Read);
+    }
+
+    private unsafe byte[] GetBytes(ulong offset) 
+    {
+        var data = (DuckDBString*)DataPointer + offset;
+
+        byte[] buffer = new byte[data->Length];
+
+        for (int i = 0; i < data->Length; i++)
+            buffer[i] = (byte)data->Data[i];
+
+        return buffer;
     }
 }

@@ -187,14 +187,14 @@ public class SchemaTests : DuckDBTestBase
         Assert.Equal(Connection.ServerVersion, schema.Rows[0][DbMetaDataColumnNames.DataSourceProductVersion]);
         Assert.Equal(Connection.ServerVersion, schema.Rows[0][DbMetaDataColumnNames.DataSourceProductVersionNormalized]);
         Assert.Equal(GroupByBehavior.Unrelated, (GroupByBehavior)schema.Rows[0][DbMetaDataColumnNames.GroupByBehavior]);
-        Assert.Equal("(^\\[\\p{Lo}\\p{Lu}\\p{Ll}_@#][\\p{Lo}\\p{Lu}\\p{Ll}\\p{Nd}@$#_]*$)|(^\\[[^\\]\\0]|\\]\\]+\\]$)|(^\\\"[^\\\"\\0]|\\\"\\\"+\\\"$)", schema.Rows[0][DbMetaDataColumnNames.IdentifierPattern]);
+        Assert.Equal("(^\\[\\p{Lo}\\p{Lu}\\p{Ll}_$][\\p{Lo}\\p{Lu}\\p{Ll}\\p{Nd}$$_]*$)|(^\\\"[^\\\"\\0]|\\\"\\\"+\\\"$)", schema.Rows[0][DbMetaDataColumnNames.IdentifierPattern]);
         Assert.Equal(IdentifierCase.Insensitive, (IdentifierCase)schema.Rows[0][DbMetaDataColumnNames.IdentifierCase]);
         Assert.Equal(false, schema.Rows[0][DbMetaDataColumnNames.OrderByColumnsInSelect]);
         Assert.Equal("{0}", schema.Rows[0][DbMetaDataColumnNames.ParameterMarkerFormat]);
-        Assert.Equal("$[\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}_@#][\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}\\p{Nd}\\uff3f_@#\\$]*(?=\\s+|$)", schema.Rows[0][DbMetaDataColumnNames.ParameterMarkerPattern]);
+        Assert.Equal("$[\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}_$][\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}\\p{Nd}\\uff3f_$\\$]*(?=\\s+|$)", schema.Rows[0][DbMetaDataColumnNames.ParameterMarkerPattern]);
         Assert.Equal(128, schema.Rows[0][DbMetaDataColumnNames.ParameterNameMaxLength]);
-        Assert.Equal("^[\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}_@#][\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}\\p{Nd}\\uff3f_@#\\$]*(?=\\s+|$)", schema.Rows[0][DbMetaDataColumnNames.ParameterNamePattern]);
-        Assert.Equal("(([^\\[]|\\]\\])*)", schema.Rows[0][DbMetaDataColumnNames.QuotedIdentifierPattern]);
+        Assert.Equal("^[\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}_$][\\p{Lo}\\p{Lu}\\p{Ll}\\p{Lm}\\p{Nd}\\uff3f_$\\$]*(?=\\s+|$)", schema.Rows[0][DbMetaDataColumnNames.ParameterNamePattern]);
+        Assert.Equal("((\"^\\\"\"|\\\"\\\")*)", schema.Rows[0][DbMetaDataColumnNames.QuotedIdentifierPattern]);
         Assert.Equal(IdentifierCase.Insensitive, (IdentifierCase)schema.Rows[0][DbMetaDataColumnNames.QuotedIdentifierCase]);
         Assert.Equal(";", schema.Rows[0][DbMetaDataColumnNames.StatementSeparatorPattern]);
         Assert.Equal("'(([^']|'')*)'", schema.Rows[0][DbMetaDataColumnNames.StringLiteralPattern]);

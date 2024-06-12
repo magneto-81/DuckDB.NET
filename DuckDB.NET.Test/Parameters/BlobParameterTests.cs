@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Text;
+
 using DuckDB.NET.Data;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestPlatform.PlatformAbstractions.Interfaces;
@@ -30,14 +32,9 @@ public class BlobParameterTests(DuckDBDatabaseFixture db) : DuckDBTestBase(db)
             }
         }
 
-        using (var streamItem = (Stream)reader.GetValue(0))
-        {
-            using (var streamReader = new StreamReader(streamItem, leaveOpen: true))
-            {
-                var text = streamReader.ReadToEnd();
-                text.Should().Be("ABCD");
-            }
-        }
+        var byteArrayItem = (byte[])reader.GetValue(0);
+
+        Encoding.UTF8.GetString(byteArrayItem).Should().Be("ABCD");
 
         Command.CommandText = "SELECT 'AB\\x0aCD'::BLOB";
         Command.ExecuteNonQuery();
@@ -58,7 +55,7 @@ public class BlobParameterTests(DuckDBDatabaseFixture db) : DuckDBTestBase(db)
             }
         }
 
-        reader.GetFieldType(0).Should().Be(typeof(Stream));
+        reader.GetFieldType(0).Should().Be(typeof(byte[]));
     }
 
     [Fact]
@@ -126,6 +123,6 @@ public class BlobParameterTests(DuckDBDatabaseFixture db) : DuckDBTestBase(db)
             }
         }
 
-        reader.GetFieldType(1).Should().Be(typeof(Stream));
+        reader.GetFieldType(1).Should().Be(typeof(byte[]));
     }
 }

@@ -83,7 +83,7 @@ internal static class DuckDBSchema
                     // https://duckdb.org/docs/sql/query_syntax/prepared_statements
                     {
                         "\\.", 
-                        "DuckDB", 
+                        "duckdb", 
                         serverVersion, 
                         serverVersion, 
                         GroupByBehavior.Unrelated, 
