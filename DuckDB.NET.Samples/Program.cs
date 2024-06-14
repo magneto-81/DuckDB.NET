@@ -27,7 +27,8 @@ namespace DuckDB.NET.Samples
 
             //AdoNetSamples();
 
-            AdoNetBlobSample();
+            //AdoNetBlobSample();
+            AdoNetDateTimeSample();
             //AdoNetDuckDBBulkSamples();
             //AdoNetSqlBulkSamples();
 
@@ -118,7 +119,29 @@ namespace DuckDB.NET.Samples
             var value1 = reader.GetFieldValue<byte[]>(0);
             var value2 = reader.GetStream(0);
 
-        } 
+        }
+
+        //
+        private static void AdoNetDateTimeSample() {
+            if (File.Exists("file.db")) {
+                File.Delete("file.db");
+            }
+
+            using var duckDBConnection = new DuckDBConnection("Data Source=:memory:");
+            duckDBConnection.Open();
+
+            using var cmd = duckDBConnection.CreateCommand();
+            cmd.CommandText = "SELECT DATE '1992-09-20';";
+            using var reader = cmd.ExecuteReader();
+
+            reader.Read();
+
+            var type = reader.GetFieldType(0);
+            var value = reader.GetValue(0);
+            var value1 = reader.GetFieldValue<byte[]>(0);
+            var value2 = reader.GetStream(0);
+
+        }
 
         private static void AdoNetDuckDBBulkSamples() {
             if (File.Exists("file.db")) {
