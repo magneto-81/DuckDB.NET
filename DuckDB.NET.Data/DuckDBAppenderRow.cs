@@ -50,12 +50,9 @@ public partial class DuckDBAppenderRow
 
     public DuckDBAppenderRow AppendValue(bool? value) => AppendValueInternal(value);
 
-#if NET6_0_OR_GREATER
-
     public DuckDBAppenderRow AppendValue(byte[]? value) => AppendSpan(value);
 
     public DuckDBAppenderRow AppendValue(Span<byte> value) => AppendSpan(value);
-#endif
 
     public DuckDBAppenderRow AppendValue(string? value) => AppendValueInternal(value);
 
@@ -137,7 +134,6 @@ public partial class DuckDBAppenderRow
         return this;
     }
 
-#if NET6_0_OR_GREATER
     private unsafe DuckDBAppenderRow AppendSpan(Span<byte> val)
     {
         if (val == null)
@@ -155,8 +151,6 @@ public partial class DuckDBAppenderRow
         columnIndex++;
         return this;
     }
-
-#endif
 
     private void CheckColumnAccess()
     {
