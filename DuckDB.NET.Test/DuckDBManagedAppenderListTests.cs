@@ -17,6 +17,12 @@ public class DuckDBManagedAppenderListTests(DuckDBDatabaseFixture db) : DuckDBTe
     }
 
     [Fact]
+    public void ListValuesBoolNullable()
+    {
+        ListValuesInternal("Bool", faker => faker.Random.Bool().OrNull(faker));
+    }
+
+    [Fact]
     public void ListValuesSByte()
     {
         ListValuesInternal("TinyInt", faker => faker.Random.SByte());
@@ -32,6 +38,12 @@ public class DuckDBManagedAppenderListTests(DuckDBDatabaseFixture db) : DuckDBTe
     public void ListValuesInt()
     {
         ListValuesInternal("Integer", faker => faker.Random.Int());
+    }
+    
+    [Fact]
+    public void ListValuesIntNullable()
+    {
+        ListValuesInternal("Integer", faker => faker.Random.Int().OrNull(faker));
     }
 
     [Fact]
@@ -92,6 +104,12 @@ public class DuckDBManagedAppenderListTests(DuckDBDatabaseFixture db) : DuckDBTe
     public void ListValuesDouble()
     {
         ListValuesInternal("Double", faker => faker.Random.Double());
+    }
+
+    [Fact]
+    public void ListValuesDoubleNullable()
+    {
+        ListValuesInternal("Double", faker => faker.Random.Double().OrNull(faker));
     }
 
     [Fact]
