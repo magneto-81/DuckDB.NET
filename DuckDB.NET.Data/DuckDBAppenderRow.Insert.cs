@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using System.Numerics;
 
 using DuckDB.NET.Data.Extensions;
@@ -13,15 +14,15 @@ partial class DuckDBAppenderRow {
 
         if (value.IsNull())
             InsertValueInternal((int?)null, columnOrdinal);
-        else if (value is bool)
+        else if (value is bool || value is SqlBoolean)
             InsertValueInternal((bool)value, columnOrdinal);
         else if (value is BigInteger)
             InsertValueInternal((BigInteger)value, columnOrdinal);
-        else if (value is long)
+        else if (value is long || value is SqlInt64)
             InsertValueInternal((long)value, columnOrdinal);
-        else if (value is int)
+        else if (value is int || value is SqlInt32)
             InsertValueInternal((int)value, columnOrdinal);
-        else if (value is short)
+        else if (value is short || value is SqlInt16)
             InsertValueInternal((short)value, columnOrdinal);
         else if (value is ulong)
             InsertValueInternal((ulong)value, columnOrdinal);
@@ -29,15 +30,15 @@ partial class DuckDBAppenderRow {
             InsertValueInternal((uint)value, columnOrdinal);
         else if (value is ushort)
             InsertValueInternal((ushort)value, columnOrdinal);
-        else if (value is byte)
+        else if (value is byte || value is SqlByte)
             InsertValueInternal((byte)value, columnOrdinal);
-        else if (value is byte[])
+        else if (value is byte[] || value is SqlBinary)
 #if NET6_0_OR_GREATER
             InsertValueInternal((byte[])value, columnOrdinal);
 #else
             throw new NotSupportedException();
 #endif
-        else if (value is string)
+        else if (value is string || value is SqlString)
             InsertValueInternal((string)value, columnOrdinal);
 #if NET6_0_OR_GREATER
         else if (value is DateOnly)
@@ -49,19 +50,19 @@ partial class DuckDBAppenderRow {
             InsertValueInternal((DuckDBDateOnly)value, columnOrdinal);
         else if (value is DuckDBTimeOnly)
             InsertValueInternal((DuckDBTimeOnly)value, columnOrdinal);
-        else if (value is DateTime)
+        else if (value is DateTime || value is SqlDateTime)
             InsertValueInternal((DateTime)value, columnOrdinal);
         else if (value is DateTimeOffset)
             InsertValueInternal((DateTimeOffset)value, columnOrdinal);
         else if (value is TimeSpan)
             InsertValueInternal((TimeSpan)value, columnOrdinal);
-        else if (value is decimal)
+        else if (value is decimal || value is SqlDecimal)
             InsertValueInternal((decimal)value, columnOrdinal);
-        else if (value is double)
+        else if (value is double || value is SqlDouble)
             InsertValueInternal((double)value, columnOrdinal);
         else if (value is float)
             InsertValueInternal((float)value, columnOrdinal);
-        else if (value is Guid)
+        else if (value is Guid || value is SqlGuid)
             InsertValueInternal((Guid)value, columnOrdinal);
         else
             throw new NotImplementedException(value?.GetType().FullName);
